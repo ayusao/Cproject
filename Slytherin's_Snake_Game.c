@@ -98,17 +98,19 @@ void draw()
 void input()
 {
     if (kbhit()) {
-        switch (getch()) {
-        case 'a':
+        int k;
+        k=getch();
+        switch (k) {
+        case 75:                   //Used for LEFT arrow key
             flag = 1;
             break;
-        case 's':
+        case 80:                   //Used for DOWN arrow key
             flag = 2;
             break;
-        case 'd':
+        case 77:                   //Used for RIGHT arrow key
             flag = 3;
             break;
-        case 'w':
+        case 72:                   //Used for UP arrow key
             flag = 4;
             break;
         case 'x':
