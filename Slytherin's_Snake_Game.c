@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>  
+#include <ctype.h>
 
 int i, j, height = 20, width = 20;
 int gameover, score;
