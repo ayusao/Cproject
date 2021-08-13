@@ -4,19 +4,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <time.h>  
+#include <time.h>
 #include <ctype.h>
+#include<windows.h>
 
 int i, j, height = 30, width = 60;
 int gameover, score;
 int x, y, fruitx, fruity, flag;
-  
+
+COORD coord={0,0};
+void gotoxy(int x,int y)
+{
+    coord.X=x;
+    coord.Y=y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coord);
+}
+
+//to print on the starting
+void first()
+{
+    printf("\t\tWelcome to the mini Snake game.(press any key to continue)\n");
+    getch();
+    system("cls");
+}
+//loadinggggg
+void loading()
+{
+    int i,j;
+    system("cls");
+    gotoxy(46,5);
+    printf("Please wait");
+    gotoxy(50,6);
+    printf("loading.....");
+    gotoxy(46,7);
+    for(i=1;i<=20;i++){
+    for(j=0;j<=100000000;j++);//to display the character slowly
+    printf("%c",177);}
+    getch();
+}
+
+
 // Function to generate the fruit
 // within the boundary
 void setup()
 {
     gameover = 0;
-  
+
     // Stores height and width
     x = height / 2;
     y = width / 2;
@@ -30,7 +63,7 @@ label2:
         goto label2;
     score = 0;
 }
-  
+
 // Function to draw the boundaries
 void draw()
 {
@@ -53,14 +86,14 @@ void draw()
         }
         printf("\n");
     }
-  
+
     // Print the score after the
     // game ends
     printf("score = %d", score);
     printf("\n");
     printf("press X to quit the game");
 }
-  
+
 // Function to take the input
 void input()
 {
@@ -84,7 +117,7 @@ void input()
         }
     }
 }
-  
+
 // Function for the logic behind
 // each movement
 void logic()
@@ -106,12 +139,12 @@ void logic()
     default:
         break;
     }
-  
+
     // If the game is over
     if (x < 0 || x > height
         || y < 0 || y > width)
         gameover = 1;
-  
+
     // If snake reaches the fruit
     // then update the score
     if (x == fruitx && y == fruity) {
@@ -119,7 +152,7 @@ void logic()
         fruitx = rand() % 20;
         if (fruitx == 0)
             goto label3;
-  
+
     // After eating the above fruit
     // generate new fruit
     label4:
@@ -151,7 +184,7 @@ void record(){
    //sdfprintf(info,"\t\t\tPlayers List\n");
    fprintf(info,"Player Name :%s\n",nplname);
     //for date and time
- 
+
    time_t mytime;
   mytime = time(NULL);
   fprintf(info,"Played Date:%s",ctime(&mytime));//**************************
@@ -170,18 +203,21 @@ void record(){
        }while(c!=EOF);}
      fclose(info);
 }
-  
+
 // Driver Code
 void main()
 {
     int m, n;
-  
+    //Intro
+    first();
+    loading();
+
     // Generate boundary
     setup();
-  
+
     // Until the game is over
     while (!gameover) {
-  
+
         // Function Call
         draw();
         input();
