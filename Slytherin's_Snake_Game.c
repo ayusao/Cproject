@@ -9,7 +9,8 @@
 #include <windows.h>
 
 //Global variables declaration
-int i, j, life = 3, height = 30, width = 60;
+int i, j, difficulty_level, life = 3, height = 30, width = 60;
+unsigned long int loop_delay;
 int gameover, score;
 int snakex, store_x, snakey, store_y, fruitx, fruity, flag,flag_check;
 int tailx[100],taily[100],piece=2,tail2x[100],tail2y[100];
@@ -24,11 +25,36 @@ void gotoxy(int x,int y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coord);
 }
 
-//to print on the starting
+// Prints the starting page
 void first()
 {
     system("cls");
-    printf("\n\nWelcome to the mini Snake game.(press any key to continue)\n");
+    printf("\n\nWelcome to the mini Snake game.(Press any key to continue)\n");
+    getch();
+    printf("\n\nChoose the difficulty level:");
+    printf("\n\n1. EASY");
+    printf("\n2. INTERMEDIATE");
+    printf("\n3. HARD");
+    printf("\n\nEnter 1 or 2 or 3 and press ENTER\n");
+    do{
+        scanf("%d", &difficulty_level);
+        if(difficulty_level == 1)
+            loop_delay = 60000000;
+        else if(difficulty_level == 2)
+            loop_delay = 40000000;
+        else if(difficulty_level == 3)
+            loop_delay = 20000000;
+        else
+            printf("ENTER 1 or 2 or 3.");
+        }while(difficulty_level != 1 && difficulty_level != 2 && difficulty_level != 3);
+    printf("\n\nINSTRUCTIONS");
+    printf("\n\n-> Foods are generated at different places.");
+    printf("\n-> Use the arrow keys on your keyboard to control the snake and grab the food.");
+    printf("\n-> The length of the snake increases everytime the food is consumed.");
+    printf("\n-> You have three lives.");
+    printf("\n-> It decreases instantly when the snake's head touches the boundary or its own body.");
+    printf("\n-> Game will be over once no more life is left.");
+    printf("\n\nPress any key to continue.");
     getch();
 }
 
@@ -53,18 +79,16 @@ void loading()
 void setup()
 {
     gameover = 0;
-
-    // Stores height and width (width along x axis and height along y axis)
     snakex = width / 2;
     snakey = height / 2;
-label1:
-    fruitx = rand() % 60;
-    if (fruitx == 0)
-        goto label1;
-label2:
-    fruity = rand() % 30;
-    if (fruity == 0)
-        goto label2;
+    label1:
+        fruitx = rand() % 60;
+        if (fruitx == 0)
+            goto label1;
+    label2:
+        fruity = rand() % 30;
+        if (fruity == 0)
+            goto label2;
     score = 0;
 }
 
@@ -74,7 +98,7 @@ void Border()
     int i;
     system("cls");
 
-    //this loop prints the two horizontal borders i.e top and bottom
+    // prints the two horizontal borders i.e top and bottom
     for(i=0;i<=width;i++)
     {
         gotoxy(i, 0);
@@ -82,7 +106,7 @@ void Border()
         gotoxy(i, 30);
         printf("%c", 178);
     }
-    //this loop prints the two verical borders i.e left and right
+    // prints the two verical borders i.e left and right
     for(i=0;i<=height;i++)
     {
         gotoxy(0, i);
@@ -97,11 +121,11 @@ void Print_snake_and_food()
 { 
     gotoxy(snakex, snakey);
     printf("0");
-    for (i=0;i<piece;i++){
-gotoxy(tailx[i],taily[i]);
-    printf ("o");
+    for (i=0;i<piece;i++)
+    {
+        gotoxy(tailx[i],taily[i]);
+        printf ("o");
     }
-
     gotoxy(fruitx, fruity);
     printf("%c", 2);
 }
@@ -112,14 +136,13 @@ void Remove_last_position_of_snake()
     gotoxy(store_x, store_y);
     printf(" ");
 
-    for (i=1;i<=piece;i++){
+    for (i=1;i<=piece;i++)
+    {
         gotoxy(tailx[i],taily[i]);
-    printf (" ");
-gotoxy(tail2x[i],tail2y[i]);
-    printf (" ");
+        printf (" ");
+        gotoxy(tail2x[i],tail2y[i]);
+        printf (" ");
     }
-
-
 }
 
 
@@ -173,7 +196,7 @@ void logic()
     prevy=taily[0];
     tailx[0]=snakex;
     taily[0]=snakey;
-    for ( i = 1; i <=piece; i++)
+    for ( i = 1; i <= piece; i++)
     {
         prev2x=tailx[i];
         prev2y=taily[i];
@@ -183,50 +206,48 @@ void logic()
         prevy=prev2y;
         tail2x[i]=prev2x;
         tail2y[i]=prev2y;
-            }
+    }
     
     store_x = snakex; //storing the current location of snake
     store_y = snakey;
 
-    for(int i=0;i<40000000;i++); //to delay
-if (flag==1 && flag_check==3)
-{
-    flag=3;
-}
-if (flag==2 && flag_check==4)
-{
-    flag=4;
-}
-if (flag==3 && flag_check==1)
-{
-    flag=1;
-}
-if (flag==4 && flag_check==2)
-{
-    flag=2;
-}
+    for(int i=0;i<loop_delay;i++); //to delay according to the difficulty level
 
-
-
-
-
-    switch (flag) {
-    case 1:
-        snakex--;
-        break;
-    case 2:
-        snakey++;
-        break;
-    case 3:
-        snakex++;
-        break;
-    case 4:
-        snakey--;
-        break;
-    default:
-        break;
-
+    if (flag==1 && flag_check==3)
+    {
+        flag=3;
     }
+    if (flag==2 && flag_check==4)
+    {
+        flag=4;
+    }
+    if (flag==3 && flag_check==1)
+    {
+        flag=1;
+    }
+    if (flag==4 && flag_check==2)
+    {
+        flag=2;
+    }
+
+    switch (flag)
+    {
+        case 1:
+            snakex--;
+            break;
+        case 2:
+            snakey++;
+            break;
+        case 3:
+            snakex++;
+            break;
+        case 4:
+            snakey--;
+            break;
+        default:
+            break;
+    }
+    
     flag_check=flag;
 
     // If the game is over i.e if snake touches the boundary
@@ -271,6 +292,7 @@ void record(){
    info=fopen("record.txt","a+");
    getch();
    system("cls");
+   fflush(stdin);
    printf("Do you want your score to be recorded? (Press 'y' or 'n')");
    if(getch() == 'y' || getch() == 'Y')
    {
@@ -344,3 +366,4 @@ void main()
     }
     record();
 }
+
