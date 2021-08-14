@@ -317,6 +317,7 @@ void main()
 {
     int m, n;
     //Intro
+    srand(time(0)); //to generate foods at different locations in every instant of the game
     setup();
     first();
     loading();
@@ -325,9 +326,9 @@ void main()
     //Until the game is over
     while (!gameover)
     {
-        if(store_x != 0) //to not execute this function in the first loop
-            Remove_last_position_of_snake();
-
+        Remove_last_position_of_snake();
+        gotoxy(0, 0); //incase the border at (0, 0) gets replaced by space after calling the function Remove_last_position_of_snake()
+        printf("%c", 178);
         Print_snake_and_food();
         Print_score_and_life();
         input();
