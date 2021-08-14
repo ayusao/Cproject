@@ -79,16 +79,22 @@ void loading()
 void setup()
 {
     gameover = 0;
+    
+    // Stores height and width (width along x axis and height along y axis)
     snakex = width / 2;
     snakey = height / 2;
-    label1:
-        fruitx = rand() % 60;
-        if (fruitx == 0)
-            goto label1;
-    label2:
-        fruity = rand() % 30;
-        if (fruity == 0)
-            goto label2;
+    tailx[0]=snakex-1;                     //initializing the coordinate of the tails 
+    taily[0]=snakey;
+    tailx[1]=snakex-2;
+    taily[1]=snakey;
+label1:
+    fruitx = rand() % 60;
+    if (fruitx == 0)
+        goto label1;
+label2:
+    fruity = rand() % 30;
+    if (fruity == 0)
+        goto label2;
     score = 0;
 }
 
@@ -119,15 +125,29 @@ void Border()
 // Displays snake and food
 void Print_snake_and_food()
 { 
+    int ky;
     gotoxy(snakex, snakey);
     printf("0");
-    for (i=0;i<piece;i++)
-    {
-        gotoxy(tailx[i],taily[i]);
-        printf ("o");
+    for (i=0;i<piece;i++){
+    gotoxy(tailx[i],taily[i]);
+    printf ("o");
     }
+
     gotoxy(fruitx, fruity);
     printf("%c", 2);
+    if(flag==0)                 //running this for the first loop as flag =0 in first loop
+     {
+         gotoxy(0, 32);
+         printf("SCORE = %d", score);
+         printf("\n");
+         printf("Press X to quit the game");
+         gotoxy(42, 32);
+         printf("LIVES REMAINING = %d", life);
+         gotoxy(35,33);
+         printf("Press arrow key to start");
+         ky=getch();
+     }   
+     
 }
 
 // Empties the previous location of snake when its position changes
