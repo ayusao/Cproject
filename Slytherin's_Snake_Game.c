@@ -13,7 +13,7 @@ int i, j, difficulty_level, life = 3, height = 30, width = 60;
 unsigned long int loop_delay;
 int gameover, score;
 int snakex, store_x, snakey, store_y, fruitx, fruity, flag,flag_check;
-int tailx[100],taily[100],piece=2,tail2x[100],tail2y[100];
+int tailx[100],taily[100],piece=2;
 
 COORD coord = {0,0};
 
@@ -140,8 +140,6 @@ void Remove_last_position_of_snake()
     {
         gotoxy(tailx[i],taily[i]);
         printf (" ");
-        gotoxy(tail2x[i],tail2y[i]);
-        printf (" ");
     }
 }
 
@@ -204,8 +202,6 @@ void logic()
         taily[i]=prevy;
         prevx=prev2x;
         prevy=prev2y;
-        tail2x[i]=prev2x;
-        tail2y[i]=prev2y;
     }
     
     store_x = snakex; //storing the current location of snake
