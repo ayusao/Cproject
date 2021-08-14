@@ -12,7 +12,7 @@
 int i, j, life = 3, height = 30, width = 60;
 int gameover, score;
 int snakex, store_x, snakey, store_y, fruitx, fruity, flag,flag_check;
-int tailx[100],taily[100],piece=0,tail2x[100],tail2y[100];
+int tailx[100],taily[100],piece=2,tail2x[100],tail2y[100];
 
 COORD coord = {0,0};
 
