@@ -9,7 +9,7 @@
 #include <windows.h>
 
 //Global variables declaration
-int i, j, height = 30, width = 60;
+int i, j, life = 3, height = 30, width = 60;
 int gameover, score;
 int snakex, store_x, snakey, store_y, fruitx, fruity, flag;
 
@@ -93,7 +93,7 @@ void Border()
 
 // Displays snake and food
 void Print_snake_and_food()
-{
+{ 
     gotoxy(snakex, snakey);
     printf("0");
     gotoxy(fruitx, fruity);
@@ -108,12 +108,14 @@ void Remove_last_position_of_snake()
 }
 
 // Prints the score below the game zone
-void Print_score()
+void Print_score_and_life()
 {
     gotoxy(0, 32);
     printf("SCORE = %d", score);
     printf("\n");
     printf("Press X to quit the game");
+    gotoxy(42, 32);
+    printf("LIVES REMAINING = %d", life);
 }
 
 // Function to take the input
@@ -174,7 +176,17 @@ void logic()
 
     // If the game is over i.e if snake touches the boundary
     if (snakex <= 0 || snakex >= width || snakey <= 0 || snakey >= height)
-        gameover = 1;
+    {
+        life--;
+        snakex = width / 2; //moving snake to the centre after life decreases
+        snakey = height / 2;
+        getch(); //waits for user to press a key before continuing to play
+        if(life == 0)
+        {
+            gameover = 1;
+            Print_score_and_life(); //prints final score and LIFE = 0
+        }
+    }
 
     // If snake reaches the fruit, update the score
     if (snakex == fruitx && snakey == fruity) {
@@ -203,39 +215,45 @@ void record(){
    info=fopen("record.txt","a+");
    getch();
    system("cls");
-   printf("Enter your name\n");
-   scanf("%[^\n]",plname);
-   //************************
-   for(j=0;plname[j]!='\0';j++){ //to convert the first letter after space to capital
-   nplname[0]=toupper(plname[0]);
-   if(plname[j-1]==' '){
-   nplname[j]=toupper(plname[j]);
-   nplname[j-1]=plname[j-1];}
-   else nplname[j]=plname[j];
-   }
-   nplname[j]='\0';
-   //*****************************
-   //sdfprintf(info,"\t\t\tPlayers List\n");
-   fprintf(info,"Player Name :%s\n",nplname);
-    //for date and time
+   printf("Do you want your score to be recorded? (Press 'y' or 'n')");
+   if(getch() == 'y' || getch() == 'Y')
+   {
+       printf("\nEnter your name\n");
+       scanf("%[^\n]",plname);
+       //************************
+       for(j=0;plname[j]!='\0';j++){ //to convert the first letter after space to capital
+       nplname[0]=toupper(plname[0]);
+       if(plname[j-1]==' '){
+       nplname[j]=toupper(plname[j]);
+       nplname[j-1]=plname[j-1];}
+       else nplname[j]=plname[j];
+       }
+       nplname[j]='\0';
+       //*****************************
+       //sdfprintf(info,"\t\t\tPlayers List\n");
+       fprintf(info,"Player Name :%s\n",nplname);
+        //for date and time
 
-   time_t mytime;
-  mytime = time(NULL);
-  fprintf(info,"Played Date:%s",ctime(&mytime));//**************************
-     fprintf(info,"Score:%d\n",px=score);//write the scores in the file
-   for(i=0;i<=50;i++)
-   fprintf(info,"%c",'_');
-   fprintf(info,"\n");
-   fclose(info);
-   printf("wanna see past records press 'y'\n");
-   cha=getch();
-   system("cls");
-   if(cha=='y'){
-   info=fopen("record.txt","r");
-   do{
-       putchar(c=getc(info));
-       }while(c!=EOF);}
-     fclose(info);
+       time_t mytime;
+      mytime = time(NULL);
+      fprintf(info,"Played Date:%s",ctime(&mytime));//**************************
+         fprintf(info,"Score:%d\n",px=score);//write the scores in the file
+       for(i=0;i<=50;i++)
+       fprintf(info,"%c",'_');
+       fprintf(info,"\n");
+       fclose(info);
+    }
+    printf("\nDo you want to see the past records? (Press 'y' or 'n')\n");
+    cha=getch();
+    system("cls");
+    if(cha=='y')
+    {
+        info=fopen("record.txt","r");
+        do{
+           putchar(c=getc(info));
+        }while(c!=EOF);
+    }
+         fclose(info);
 }
 
 // Driver Code
@@ -255,13 +273,17 @@ void main()
             Remove_last_position_of_snake();
 
         Print_snake_and_food();
-        Print_score();
+        Print_score_and_life();
         input();
         logic();
     }
-    gotoxy(1,1);
-    printf("GAME OVER");
-    gotoxy(1,2);
-    printf("Press any key ko continue.");
+    if(getch())
+    {
+        gotoxy(1,1);
+        printf("GAME OVER");
+        gotoxy(1,2);
+        printf("Press any key ko continue.");
+        getch();
+    }
     record();
 }
