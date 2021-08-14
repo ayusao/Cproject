@@ -12,6 +12,7 @@
 int i, j, life = 3, height = 30, width = 60;
 int gameover, score;
 int snakex, store_x, snakey, store_y, fruitx, fruity, flag;
+int tailx[100],taily[100],piece=0,tail2x[100],tail2y[100];
 
 COORD coord = {0,0};
 
@@ -96,6 +97,11 @@ void Print_snake_and_food()
 { 
     gotoxy(snakex, snakey);
     printf("0");
+    for (i=0;i<piece;i++){
+gotoxy(tailx[i],taily[i]);
+    printf ("o");
+    }
+
     gotoxy(fruitx, fruity);
     printf("%c", 2);
 }
@@ -105,7 +111,17 @@ void Remove_last_position_of_snake()
 {
     gotoxy(store_x, store_y);
     printf(" ");
+
+    for (i=1;i<=piece;i++){
+        gotoxy(tailx[i],taily[i]);
+    printf (" ");
+gotoxy(tail2x[i],tail2y[i]);
+    printf (" ");
+    }
+
+
 }
+
 
 // Prints the score below the game zone
 void Print_score_and_life()
@@ -152,6 +168,23 @@ void input()
 // Function for the logic behind each movement
 void logic()
 {
+    int i;int prevx,prevy,prev2x,prev2y;
+    prevx=tailx[0];
+    prevy=taily[0];
+    tailx[0]=snakex;
+    taily[0]=snakey;
+    for ( i = 1; i <=piece; i++)
+    {
+        prev2x=tailx[i];
+        prev2y=taily[i];
+        tailx[i]=prevx;
+        taily[i]=prevy;
+        prevx=prev2x;
+        prevy=prev2y;
+        tail2x[i]=prev2x;
+        tail2y[i]=prev2y;
+            }
+    
     store_x = snakex; //storing the current location of snake
     store_y = snakey;
 
@@ -205,6 +238,7 @@ void logic()
             goto label4;
 
         score += 10;
+        piece++;
     }
 }
 
