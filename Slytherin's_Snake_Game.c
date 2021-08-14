@@ -301,6 +301,16 @@ void logic()
     }
 }
 
+void check(){
+ for ( i = 1; i <= piece; i++)
+    {
+        if (snakex==tailx[i] && snakey==taily[i])
+        {
+            life--;
+        }
+}
+}
+
 void record(){
    char plname[20],nplname[20],cha,c;
    int i,j,px;
@@ -371,6 +381,7 @@ void main()
         Print_score_and_life();
         input();
         logic();
+        check();
     }
     if(getch())
     {
