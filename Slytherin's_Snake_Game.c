@@ -11,7 +11,7 @@
 //Global variables declaration
 int i, j, life = 3, height = 30, width = 60;
 int gameover, score;
-int snakex, store_x, snakey, store_y, fruitx, fruity, flag;
+int snakex, store_x, snakey, store_y, fruitx, fruity, flag,flag_check;
 int tailx[100],taily[100],piece=0,tail2x[100],tail2y[100];
 
 COORD coord = {0,0};
@@ -189,6 +189,26 @@ void logic()
     store_y = snakey;
 
     for(int i=0;i<40000000;i++); //to delay
+if (flag==1 && flag_check==3)
+{
+    flag=3;
+}
+if (flag==2 && flag_check==4)
+{
+    flag=4;
+}
+if (flag==3 && flag_check==1)
+{
+    flag=1;
+}
+if (flag==4 && flag_check==2)
+{
+    flag=2;
+}
+
+
+
+
 
     switch (flag) {
     case 1:
@@ -205,7 +225,9 @@ void logic()
         break;
     default:
         break;
+
     }
+    flag_check=flag;
 
     // If the game is over i.e if snake touches the boundary
     if (snakex <= 0 || snakex >= width || snakey <= 0 || snakey >= height)
