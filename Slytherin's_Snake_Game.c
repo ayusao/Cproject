@@ -34,9 +34,9 @@ void first()
     printf("\n\nChoose the difficulty level:");
     printf("\n\n1. EASY");
     printf("\n2. INTERMEDIATE");
-    printf("\n3. HARD");
-    printf("\n\nEnter 1 or 2 or 3 and press ENTER\n");
+    printf("\n3. HARD\n");
     do{
+        printf("\nPress 1 or 2 or 3 and hit ENTER\n");
         scanf("%d", &difficulty_level);
         if(difficulty_level == 1)
             loop_delay = 60000000;
@@ -45,10 +45,10 @@ void first()
         else if(difficulty_level == 3)
             loop_delay = 20000000;
         else
-            printf("ENTER 1 or 2 or 3.");
+            difficulty_level = 0; //not set
         }while(difficulty_level != 1 && difficulty_level != 2 && difficulty_level != 3);
     printf("\n\nINSTRUCTIONS");
-    printf("\n\n-> Foods are generated at different places.");
+    printf("\n\n-> Foods are generated at random places.");
     printf("\n-> Use the arrow keys on your keyboard to control the snake and grab the food.");
     printf("\n-> The length of the snake increases everytime the food is consumed.");
     printf("\n-> You have three lives.");
@@ -71,6 +71,8 @@ void loading()
     for(i=1;i<=20;i++){
     for(j=0;j<=100000000;j++);//to display the character slowly
     printf("%c",177);}
+    gotoxy(25, 19);
+    printf("Press enter key to continue");
     getch();
 }
 
@@ -79,8 +81,6 @@ void loading()
 void setup()
 {
     gameover = 0;
-
-    // Stores height and width (width along x axis and height along y axis)
     snakex = width / 2;
     snakey = height / 2;
     tailx[0]=snakex-1;                     //initializing the coordinate of the tails
@@ -143,7 +143,7 @@ void Print_snake_and_food()
          printf("Press X to quit the game");
          gotoxy(42, 32);
          printf("LIVES REMAINING = %d", life);
-         gotoxy(35,33);
+         gotoxy(37,33);
          printf("Press arrow key to start");
          ky=getch();
      }
@@ -160,6 +160,11 @@ void Remove_last_position_of_snake()
     {
         gotoxy(tailx[i],taily[i]);
         printf (" ");
+    }
+    if(gameover == 1) //to remove food when game is over
+    {
+        gotoxy(fruitx, fruity);
+        printf(" ");
     }
 }
 
@@ -325,18 +330,19 @@ void check(){
 
 void record(){
    char plname[20],nplname[20],cha,c;
-   int i,j,px;
+   int i,j;
    FILE *info;
    info=fopen("record.txt","a+");
    getch();
    system("cls");
    fflush(stdin);
    printf("Do you want your score to be recorded? (Press 'y' or 'n')");
-   if(getch() == 'y' || getch() == 'Y')
+   c = getch();
+   if(c == 'y' || c == 'Y')
    {
        printf("\nEnter your name\n");
        scanf("%[^\n]",plname);
-       //************************
+
        for(j=0;plname[j]!='\0';j++){ //to convert the first letter after space to capital
        nplname[0]=toupper(plname[0]);
        if(plname[j-1]==' '){
@@ -345,15 +351,19 @@ void record(){
        else nplname[j]=plname[j];
        }
        nplname[j]='\0';
-       //*****************************
-       //sdfprintf(info,"\t\t\tPlayers List\n");
-       fprintf(info,"Player Name :%s\n",nplname);
+       fprintf(info,"Player Name : %s\n",nplname);
         //for date and time
 
-       time_t mytime;
-      mytime = time(NULL);
-      fprintf(info,"Played Date:%s",ctime(&mytime));//**************************
-         fprintf(info,"Score:%d\n",px=score);//write the scores in the file
+        time_t mytime;
+        mytime = time(NULL);
+        fprintf(info,"Played Date : %s",ctime(&mytime));
+        fprintf(info,"Score : %d\n",score);//write the scores in the file
+        if(difficulty_level == 1)
+            fprintf(info,"Difficulty Level : Easy\n");
+        if(difficulty_level == 2)
+            fprintf(info,"Difficulty Level : Intermediate\n");
+        if(difficulty_level == 3)
+            fprintf(info,"Difficulty Level : Hard\n");
        for(i=0;i<=50;i++)
        fprintf(info,"%c",'_');
        fprintf(info,"\n");
@@ -397,6 +407,7 @@ void main()
     }
     if(getch())
     {
+        Remove_last_position_of_snake();
         gotoxy(1,1);
         printf("GAME OVER");
         gotoxy(1,2);
