@@ -309,6 +309,16 @@ void check(){
         if (snakex==tailx[i] && snakey==taily[i])
         {
             life--;
+        Beep(500,500);
+        snakex = width / 2; //moving snake to the centre after life decreases
+        snakey = height / 2;
+        getch(); //waits for user to press a key before continuing to play
+        if(life == 0)
+        {
+            gameover = 1;
+            printf("\a");
+            Print_score_and_life(); //prints final score and LIFE = 0
+        }
         }
 }
 }
@@ -395,4 +405,3 @@ void main()
     }
     record();
 }
-
