@@ -13,7 +13,7 @@ int i, j, difficulty_level, life = 3, height = 30, width = 60;
 unsigned long int loop_delay;
 int gameover, score;
 int snakex, store_x, snakey, store_y, fruitx, fruity, flag,flag_check;
-int tailx[100],taily[100],piece=2,exe;
+int tailx[100],taily[100],piece=6,exe;
 
 COORD coord = {0,0};
 
@@ -83,10 +83,11 @@ void setup()
     gameover = 0;
     snakex = width / 2;
     snakey = height / 2;
-    tailx[0]=snakex-1;                     //initializing the coordinate of the tails
-    taily[0]=snakey;
-    tailx[1]=snakex-2;
-    taily[1]=snakey;
+    for ( i = 1; i <=piece; i++)
+    {
+        tailx[i-1]=snakex-i;                //initializing the coordinate of the tails
+        taily[i-1]=snakey;
+    }
 label1:
     fruitx = rand() % 60;
     if (fruitx == 0)
@@ -96,6 +97,25 @@ label2:
     if (fruity == 0)
         goto label2;
     score = 0;
+}
+
+void setup2()
+{
+    
+    snakex = width / 2;
+    snakey = height / 2;
+    for ( i = 1; i <=piece; i++)
+    {
+        tailx[i-1]=snakex-i;                //initializing the coordinate of the tails
+        taily[i-1]=snakey;
+    }
+    gotoxy(snakex, snakey);
+    printf("0");
+    for (i=0;i<piece;i++){
+    gotoxy(tailx[i],taily[i]);
+    printf ("o");
+    }
+    
 }
 
 // Draws the border
@@ -293,19 +313,26 @@ void logic()
         }
         
         getch(); //waits for user to press a key before continuing to play
+        if(life!=0){
+        getch();
+setup2();
+getch();}
+        
+}
+
+
         if(life == 0)
         {
             gameover = 1;
             printf("\a");
             Print_score_and_life(); //prints final score and LIFE = 0
         }
-    }
 
     // If snake reaches the fruit, update the score
     if (snakex == fruitx && snakey == fruity) {
         gotoxy(fruitx, fruity); //remove food from previous location
         printf(" ");
-
+    
     // After eating the above fruit generate new fruit
     label3:
         fruitx = rand() % 60;
@@ -321,6 +348,8 @@ void logic()
         piece++;
     }
 }
+
+
 
 void check(){
  for ( i = 1; i <= piece; i++)
@@ -344,6 +373,11 @@ void check(){
             taily[i]=snakey;
         }
         getch(); //waits for user to press a key before continuing to play
+if(life!=0){
+        getch();
+setup2();
+getch();}
+        
         if(life == 0)
         {
             gameover = 1;
