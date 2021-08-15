@@ -79,11 +79,11 @@ void loading()
 void setup()
 {
     gameover = 0;
-    
+
     // Stores height and width (width along x axis and height along y axis)
     snakex = width / 2;
     snakey = height / 2;
-    tailx[0]=snakex-1;                     //initializing the coordinate of the tails 
+    tailx[0]=snakex-1;                     //initializing the coordinate of the tails
     taily[0]=snakey;
     tailx[1]=snakex-2;
     taily[1]=snakey;
@@ -124,7 +124,7 @@ void Border()
 
 // Displays snake and food
 void Print_snake_and_food()
-{ 
+{
     int ky;
     gotoxy(snakex, snakey);
     printf("0");
@@ -146,8 +146,8 @@ void Print_snake_and_food()
          gotoxy(35,33);
          printf("Press arrow key to start");
          ky=getch();
-     }   
-     
+     }
+
 }
 
 // Empties the previous location of snake when its position changes
@@ -181,7 +181,7 @@ void input()
     if(kbhit())
     {
         int k;
-        k = getch(); 
+        k = getch();
         switch (k)
         {
             case 75:                //Used for LEFT arrow key
@@ -223,7 +223,7 @@ void logic()
         prevx=prev2x;
         prevy=prev2y;
     }
-    
+
     store_x = snakex; //storing the current location of snake
     store_y = snakey;
 
@@ -263,19 +263,21 @@ void logic()
         default:
             break;
     }
-    
+
     flag_check=flag;
 
     // If the game is over i.e if snake touches the boundary
     if (snakex <= 0 || snakex >= width || snakey <= 0 || snakey >= height)
     {
         life--;
+        Beep(500,500);
         snakex = width / 2; //moving snake to the centre after life decreases
         snakey = height / 2;
         getch(); //waits for user to press a key before continuing to play
         if(life == 0)
         {
             gameover = 1;
+            printf("\a");
             Print_score_and_life(); //prints final score and LIFE = 0
         }
     }
