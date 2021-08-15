@@ -13,7 +13,7 @@ int i, j, difficulty_level, life = 3, height = 30, width = 60;
 unsigned long int loop_delay;
 int gameover, score;
 int snakex, store_x, snakey, store_y, fruitx, fruity, flag,flag_check;
-int tailx[100],taily[100],piece=2;
+int tailx[100],taily[100],piece=2,exe;
 
 COORD coord = {0,0};
 
@@ -274,10 +274,24 @@ void logic()
     // If the game is over i.e if snake touches the boundary
     if (snakex <= 0 || snakex >= width || snakey <= 0 || snakey >= height)
     {
+        exe=0;
         life--;
         Beep(500,500);
+
+          for ( i = 0; i <=piece; i++)
+        {
+            gotoxy(tailx[i],taily[i]);
+            printf(" ");
+        }
+        
         snakex = width / 2; //moving snake to the centre after life decreases
         snakey = height / 2;
+        for ( i = 0; i <= piece; i++)
+        {
+            tailx[i]=snakex;
+            taily[i]=snakey;
+        }
+        
         getch(); //waits for user to press a key before continuing to play
         if(life == 0)
         {
@@ -311,12 +325,24 @@ void logic()
 void check(){
  for ( i = 1; i <= piece; i++)
     {
+        if(exe==1){
         if (snakex==tailx[i] && snakey==taily[i])
         {
             life--;
         Beep(500,500);
+        for ( i = 0; i <=piece; i++)
+        {
+            gotoxy(tailx[i],taily[i]);
+            printf(" ");
+        }
+        
         snakex = width / 2; //moving snake to the centre after life decreases
         snakey = height / 2;
+        for ( i = 0; i <= piece; i++)
+        {
+            tailx[i]=snakex;
+            taily[i]=snakey;
+        }
         getch(); //waits for user to press a key before continuing to play
         if(life == 0)
         {
@@ -325,6 +351,7 @@ void check(){
             Print_score_and_life(); //prints final score and LIFE = 0
         }
         }
+}
 }
 }
 
@@ -395,7 +422,7 @@ void main()
 
     //Until the game is over
     while (!gameover)
-    {
+    {exe=1;
         Remove_last_position_of_snake();
         gotoxy(0, 0); //incase the border at (0, 0) gets replaced by space after calling the function Remove_last_position_of_snake()
         printf("%c", 178);
