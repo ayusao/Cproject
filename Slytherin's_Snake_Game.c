@@ -9,7 +9,7 @@
 #include <windows.h>
 
 //Global variables declaration
-int i, j, difficulty_level, life = 3, height = 30, width = 60;
+int i, j, difficulty_level, pause, life = 3, height = 30, width = 60;
 unsigned long int loop_delay;
 int gameover, score;
 int snakex, store_x, snakey, store_y, fruitx, fruity, flag,flag_check;
@@ -157,12 +157,6 @@ void Print_snake_and_food()
     printf("%c", 2);
     if(flag==0)                 //running this for the first loop as flag =0 in first loop
      {
-         gotoxy(0, 32);
-         printf("SCORE = %d", score);
-         printf("\n");
-         printf("Press X to quit the game");
-         gotoxy(42, 32);
-         printf("LIVES REMAINING = %d", life);
          gotoxy(37,33);
          printf("Press arrow key to start");
          ky=getch();
@@ -181,6 +175,11 @@ void Remove_last_position_of_snake()
         gotoxy(tailx[i],taily[i]);
         printf (" ");
     }
+    if(piece >= width/2) //to restore boundary at (0,15) when removed by long snake
+    {
+        gotoxy(0, height/2);
+        printf("%c", 178);
+    }
     if(gameover == 1) //to remove food when game is over
     {
         gotoxy(fruitx, fruity);
@@ -195,6 +194,8 @@ void Print_score_and_life()
     gotoxy(0, 32);
     printf("SCORE = %d", score);
     printf("\n");
+    printf("Press space bar to pause");
+    printf("\n");
     printf("Press X to quit the game");
     gotoxy(42, 32);
     printf("LIVES REMAINING = %d", life);
@@ -205,6 +206,7 @@ void input()
 {
     if(kbhit())
     {
+        pause = 0;
         int k;
         k = getch();
         switch (k)
@@ -227,6 +229,9 @@ void input()
             case 'X':
                 gameover = 1;
                 break;
+            case ' ':
+                pause = 1;
+                break;
         }
     }
 }
@@ -234,6 +239,11 @@ void input()
 // Function for the logic behind each movement
 void logic()
 {
+    while(pause == 1)
+    {
+        Print_snake_and_food();
+        input();
+    }
     int i;int prevx,prevy,prev2x,prev2y;
     prevx=tailx[0];
     prevy=taily[0];
