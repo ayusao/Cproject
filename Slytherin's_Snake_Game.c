@@ -301,37 +301,7 @@ void logic()
 
     flag_check=flag;
 
-    // If the game is over i.e if snake touches the boundary
-    if (snakex <= 0 || snakex >= width || snakey <= 0 || snakey >= height)
-    {
-        exe=0;
-        life--;
-        Beep(500,500);
-
-          for ( i = 0; i <=piece; i++)
-        {
-            gotoxy(tailx[i],taily[i]);
-            printf(" ");
-        }
-        
-        snakex = width / 2; //moving snake to the centre after life decreases
-        snakey = height / 2;
-        for ( i = 0; i <= piece; i++)
-        {
-            tailx[i]=snakex;
-            taily[i]=snakey;
-        }
-        
-        getch(); //waits for user to press a key before continuing to play
-        if(life!=0){
-        getch();
-setup2();
-getch();}
-        
-}
-
-
-        if(life == 0)
+    if(life == 0)
         {
             gameover = 1;
             printf("\a");
@@ -360,13 +330,42 @@ getch();}
 }
 
 
+void check2(){
+    // If the game is over i.e if snake touches the boundary
+    if (snakex <= 0 || snakex >= width || snakey <= 0 || snakey >= height)
+    {flag_check=0;
+        exe=0;
+        life--;
+        Beep(500,500);
+
+          for ( i = 0; i <=piece; i++)
+        {
+            gotoxy(tailx[i],taily[i]);
+            printf(" ");
+        }
+        
+        snakex = width / 2; //moving snake to the centre after life decreases
+        snakey = height / 2;
+        for ( i = 0; i <= piece; i++)
+        {
+            tailx[i]=snakex;
+            taily[i]=snakey;
+        }
+        if(life!=0){
+        for(i=0;i<=250000;i++);
+setup2();
+getch();}   
+}
+}
+
+
 
 void check(){
  for ( i = 1; i <= piece; i++)
     {
         if(exe==1){
         if (snakex==tailx[i] && snakey==taily[i])
-        {
+        {flag_check=0;
             life--;
         Beep(500,500);
         for ( i = 0; i <=piece; i++)
@@ -382,9 +381,9 @@ void check(){
             tailx[i]=snakex;
             taily[i]=snakey;
         }
-        getch(); //waits for user to press a key before continuing to play
+        
 if(life!=0){
-        getch();
+        for(i=0;i<=250000;i++);
 setup2();
 getch();}
         
@@ -474,6 +473,7 @@ void main()
         Print_score_and_life();
         input();
         logic();
+        check2();
         check();
     }
     if(getch())
